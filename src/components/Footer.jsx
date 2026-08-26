@@ -1,179 +1,34 @@
-import { motion } from "framer-motion";
-import { Github, Linkedin, Mail, ArrowUp } from "lucide-react";
+import { Github, Linkedin, Mail, MapPin, Send } from "lucide-react";
+import Logo from "./Logo";
 
-export default function Footer({ darkMode }) {
-  const socials = [
-    {
-      href: "https://github.com/ahmed-dew123",
-      label: "GitHub",
-      icon: Github,
-      external: true,
-    },
-    {
-      href: "https://www.linkedin.com/in/ahmed-kashif-6665992b2",
-      label: "LinkedIn",
-      icon: Linkedin,
-      external: true,
-    },
-    {
-      href: "mailto:mrahmedkashif78@gmail.com",
-      label: "Email",
-      icon: Mail,
-      external: false,
-    },
-  ];
-
+export default function Footer() {
   return (
-    <footer
-      id="contact"
-      className={`transition-all duration-500 ${darkMode
-          ? "bg-[#050816] text-white border-t border-gray-800"
-          : "bg-gray-50 text-slate-900 border-t border-gray-200"
-        }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 lg:px-16 py-20">
-
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.7 }}
-          className="grid lg:grid-cols-3 gap-12"
-        >
-
-          {/* LEFT */}
-          <div>
-
-            <h2 className="text-3xl font-bold mb-5">
-              Ahmed{" "}
-              <span style={{ color: "var(--primary)" }}>
-                Kashif
-              </span>
-            </h2>
-
-            <p
-              className={`leading-8 ${darkMode ? "text-gray-400" : "text-slate-600"
-                }`}
-            >
-              Frontend Developer passionate about creating modern,
-              responsive and beautiful websites using React.js,
-              Tailwind CSS, JavaScript, HTML and CSS.
-            </p>
-
-          </div>
-
-          {/* CONTACT */}
-          <div>
-
-            <h3
-              className="text-2xl font-bold mb-6"
-              style={{ color: "var(--primary)" }}
-            >
-              Contact
-            </h3>
-
-            <div className="space-y-4">
-
-              <p>📧 mrahmedkashif78@gmail.com</p>
-
-              <p>📱 +92 348 2865623</p>
-
-              <p>📍 Pakistan,punjab,lahore</p>
-
+    <footer id="contact" className="section-anchor footer-wrap">
+      <div className="page-container">
+        <div className="contact-card glass-card">
+          <div className="contact-copy">
+            <p className="eyebrow">LET'S CONNECT</p>
+            <h2>Have a project or opportunity in mind?</h2>
+            <p>Feel free to contact me for frontend work, internship opportunities or collaboration.</p>
+            <div className="contact-list">
+              <a href="mailto:mrahmedkashif78@gmail.com"><Mail size={18} /> mrahmedkashif78@gmail.com</a>
+              <span><MapPin size={18} /> Lahore, Pakistan</span>
             </div>
-
           </div>
 
-          {/* QUICK LINKS */}
-          <div>
-
-            <h3
-              className="text-2xl font-bold mb-6"
-              style={{ color: "var(--primary)" }}
-            >
-              Quick Links
-            </h3>
-
-            <ul className="space-y-4">
-
-              <li>
-                <a href="#home" className="hover:text-[var(--primary)] transition">
-                  Home
-                </a>
-              </li>
-
-              <li>
-                <a href="#about" className="hover:text-[var(--primary)] transition">
-                  About
-                </a>
-              </li>
-
-              <li>
-                <a href="#skills" className="hover:text-[var(--primary)] transition">
-                  Skills
-                </a>
-              </li>
-
-              <li>
-                <a href="#services" className="hover:text-[var(--primary)] transition">
-                  Services
-                </a>
-              </li>
-
-            </ul>
-
-          </div>
-
-        </motion.div>
-
-        {/* SOCIAL LINKS */}
-        <div className="flex justify-center gap-8 mt-14">
-
-          {socials.map(({ href, label, icon: Icon, external }) => (
-            <div key={label} className="flex flex-col items-center">
-              <a
-                href={href}
-                {...(external ? { target: "_blank", rel: "noreferrer" } : {})}
-                className="social-btn w-12 h-12 rounded-full flex items-center justify-center"
-                style={{
-                  backgroundColor: "var(--primary)",
-                  color: "white",
-                }}
-              >
-                <Icon size={20} />
-              </a>
-              <span className="mt-2 text-sm">{label}</span>
+          <div className="contact-actions">
+            <a className="btn btn-primary" href="mailto:mrahmedkashif78@gmail.com">Send Email <Send size={17} /></a>
+            <div className="social-row">
+              <a href="https://github.com/ahmed-dew123" target="_blank" rel="noreferrer" aria-label="GitHub"><Github /></a>
+              <a href="https://www.linkedin.com/in/ahmed-kashif-6665992b2" target="_blank" rel="noreferrer" aria-label="LinkedIn"><Linkedin /></a>
             </div>
-          ))}
-
+          </div>
         </div>
 
-        {/* COPYRIGHT */}
-        <div
-          className={`border-t mt-12 pt-6 text-center ${darkMode
-              ? "border-gray-700 text-gray-400"
-              : "border-gray-300 text-slate-600"
-            }`}
-        >
-          © {new Date().getFullYear()} Ahmed Kashif. All Rights Reserved.
+        <div className="footer-bottom">
+          <Logo />
+          <p>© {new Date().getFullYear()} Ahmed Kashif. Built with React and lots of practice.</p>
         </div>
-
-        {/* BACK TO TOP */}
-        <div className="flex justify-center mt-8">
-
-          <a
-            href="#home"
-            className="social-btn w-12 h-12 rounded-full flex items-center justify-center"
-            style={{
-              backgroundColor: "var(--primary)",
-              color: "white",
-            }}
-          >
-            <ArrowUp size={20} />
-          </a>
-
-        </div>
-
       </div>
     </footer>
   );
