@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 import { ArrowLeft, Minus, Plus, Search, ShoppingBag, ShoppingCart, Star, X } from "lucide-react";
-import { Link } from "react-router-dom";
 import Logo from "../components/Logo";
 
 const products = [
@@ -20,13 +19,11 @@ export default function Ecommerce() {
   const [cart, setCart] = useState([]);
   const [cartOpen, setCartOpen] = useState(false);
 
-  const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
-      const matchesCategory = category === "All" || product.category === category;
-      const matchesSearch = product.name.toLowerCase().includes(search.toLowerCase());
-      return matchesCategory && matchesSearch;
-    });
-  }, [category, search]);
+  const filteredProducts = useMemo(() => products.filter((product) => {
+    const matchesCategory = category === "All" || product.category === category;
+    const matchesSearch = product.name.toLowerCase().includes(search.toLowerCase());
+    return matchesCategory && matchesSearch;
+  }), [category, search]);
 
   const addToCart = (product) => {
     setCart((items) => {
@@ -47,9 +44,11 @@ export default function Ecommerce() {
   return (
     <div className="shop-page">
       <header className="shop-nav">
-        <Link to="/" className="shop-back"><ArrowLeft size={18} /> Portfolio</Link>
+        <a href="/" className="shop-back"><ArrowLeft size={18} aria-hidden="true" /> Portfolio</a>
         <div className="shop-brand"><Logo /> <strong>NovaShop</strong></div>
-        <button className="shop-cart-button" onClick={() => setCartOpen(true)}><ShoppingCart size={20} /><span>{cartCount}</span></button>
+        <button type="button" className="shop-cart-button" onClick={() => setCartOpen(true)} aria-label={`Open cart with ${cartCount} items`}>
+          <ShoppingCart size={20} aria-hidden="true" /><span aria-hidden="true">{cartCount}</span>
+        </button>
       </header>
 
       <main className="shop-main">
@@ -58,31 +57,38 @@ export default function Ecommerce() {
             <p className="eyebrow">REACT E-COMMERCE DEMO</p>
             <h1>Discover products with a clean shopping experience.</h1>
             <p>This demo page shows a responsive product grid, search, category filters and a working local cart.</p>
-            <a href="#shop-products" className="btn btn-primary">Shop products <ShoppingBag size={18} /></a>
+            <a href="#shop-products" className="btn btn-primary">Shop products <ShoppingBag size={18} aria-hidden="true" /></a>
           </div>
-          <div className="shop-showcase">
+          <div className="shop-showcase" aria-hidden="true">
             <div className="showcase-ring" />
             <div className="showcase-product">🎧</div>
             <span className="showcase-label">Featured product</span>
           </div>
         </section>
 
-        <section id="shop-products" className="shop-products-section">
+        <section id="shop-products" className="shop-products-section" aria-labelledby="products-heading">
+          <h2 id="products-heading" className="sr-only">Products</h2>
           <div className="shop-toolbar">
-            <div className="shop-search"><Search size={18} /><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search products" /></div>
-            <div className="shop-categories">
-              {categories.map((item) => <button className={category === item ? "active" : ""} key={item} onClick={() => setCategory(item)}>{item}</button>)}
+            <label className="shop-search">
+              <Search size={18} aria-hidden="true" />
+              <span className="sr-only">Search products</span>
+              <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search products" />
+            </label>
+            <div className="shop-categories" role="group" aria-label="Product categories">
+              {categories.map((item) => (
+                <button type="button" className={category === item ? "active" : ""} key={item} onClick={() => setCategory(item)} aria-pressed={category === item}>{item}</button>
+              ))}
             </div>
           </div>
 
           <div className="product-grid">
             {filteredProducts.map((product) => (
               <article className="product-card" key={product.id}>
-                <div className="product-image"><span>{product.icon}</span><small>{product.category}</small></div>
+                <div className="product-image" aria-hidden="true"><span>{product.icon}</span><small>{product.category}</small></div>
                 <div className="product-info">
-                  <div className="product-rating"><Star size={14} fill="currentColor" /> {product.rating}</div>
+                  <div className="product-rating"><Star size={14} fill="currentColor" aria-hidden="true" /><span className="sr-only">Rating: </span>{product.rating}<span className="sr-only"> out of 5</span></div>
                   <h3>{product.name}</h3>
-                  <div className="product-bottom"><strong>${product.price}</strong><button onClick={() => addToCart(product)}>Add to cart</button></div>
+                  <div className="product-bottom"><strong>${product.price}</strong><button type="button" onClick={() => addToCart(product)}>Add to cart</button></div>
                 </div>
               </article>
             ))}
@@ -91,21 +97,31 @@ export default function Ecommerce() {
       </main>
 
       {cartOpen && (
-        <div className="cart-overlay" onClick={() => setCartOpen(false)}>
-          <aside className="cart-drawer" onClick={(e) => e.stopPropagation()}>
-            <div className="cart-head"><div><small>YOUR CART</small><h2>{cartCount} item{cartCount === 1 ? "" : "s"}</h2></div><button onClick={() => setCartOpen(false)}><X /></button></div>
+        <div className="cart-overlay" onClick={() => setCartOpen(false)} role="presentation">
+          <aside className="cart-drawer" onClick={(e) => e.stopPropagation()} aria-label="Shopping cart">
+            <div className="cart-head">
+              <div><small>YOUR CART</small><h2>{cartCount} item{cartCount === 1 ? "" : "s"}</h2></div>
+              <button type="button" onClick={() => setCartOpen(false)} aria-label="Close cart"><X aria-hidden="true" /></button>
+            </div>
             <div className="cart-items">
-              {cart.length === 0 && <div className="empty-cart"><ShoppingCart /><p>Your cart is empty.</p></div>}
+              {cart.length === 0 && <div className="empty-cart"><ShoppingCart aria-hidden="true" /><p>Your cart is empty.</p></div>}
               {cart.map((item) => (
                 <div className="cart-item" key={item.id}>
-                  <div className="cart-icon">{item.icon}</div>
-                  <div className="cart-item-info"><strong>{item.name}</strong><small>${item.price}</small><div><button onClick={() => changeQty(item.id, -1)}><Minus size={14} /></button><span>{item.qty}</span><button onClick={() => changeQty(item.id, 1)}><Plus size={14} /></button></div></div>
-                  <button className="remove-button" onClick={() => removeItem(item.id)}><X size={16} /></button>
+                  <div className="cart-icon" aria-hidden="true">{item.icon}</div>
+                  <div className="cart-item-info">
+                    <strong>{item.name}</strong><small>${item.price}</small>
+                    <div>
+                      <button type="button" onClick={() => changeQty(item.id, -1)} aria-label={`Decrease ${item.name} quantity`}><Minus size={14} aria-hidden="true" /></button>
+                      <span>{item.qty}</span>
+                      <button type="button" onClick={() => changeQty(item.id, 1)} aria-label={`Increase ${item.name} quantity`}><Plus size={14} aria-hidden="true" /></button>
+                    </div>
+                  </div>
+                  <button type="button" className="remove-button" onClick={() => removeItem(item.id)} aria-label={`Remove ${item.name} from cart`}><X size={16} aria-hidden="true" /></button>
                 </div>
               ))}
             </div>
             <div className="cart-total"><span>Total</span><strong>${total}</strong></div>
-            <button className="checkout-button" disabled={!cart.length}>Demo checkout</button>
+            <button type="button" className="checkout-button" disabled={!cart.length}>Demo checkout</button>
           </aside>
         </div>
       )}

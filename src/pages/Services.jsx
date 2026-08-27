@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Gauge, LayoutTemplate, MonitorSmartphone, Paintbrush, Wrench, Zap } from "lucide-react";
 import SectionTitle from "../components/SectionTitle";
 
@@ -18,21 +17,13 @@ export default function Services() {
         <SectionTitle eyebrow="WHAT I DO" title="Services focused on the frontend" text="Simple services that match the work I actually do and keep the portfolio believable." />
 
         <div className="services-grid">
-          {services.map(([Icon, title, text], index) => (
-            <motion.article
-              className="service-card glass-card"
-              key={title}
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ delay: index * 0.07 }}
-              whileHover={{ y: -8, rotateX: 2, rotateY: index % 2 ? 2 : -2 }}
-            >
-              <div className="service-icon"><Icon /></div>
+          {services.map(([Icon, title, text]) => (
+            <article className="service-card glass-card reveal" key={title}>
+              <div className="service-icon"><Icon aria-hidden="true" /></div>
               <h3>{title}</h3>
               <p>{text}</p>
-              <span className="service-line" />
-            </motion.article>
+              <span className="service-line" aria-hidden="true" />
+            </article>
           ))}
         </div>
       </div>

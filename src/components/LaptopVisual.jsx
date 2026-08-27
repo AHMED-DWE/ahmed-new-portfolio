@@ -1,26 +1,15 @@
-import { motion } from "framer-motion";
 import { Code2, Gauge, Sparkles } from "lucide-react";
 
 const files = ["src", "components", "App.jsx", "Home.jsx", "About.jsx", "index.css"];
 
 export default function LaptopVisual() {
   return (
-    <motion.div
-      className="laptop-scene"
-      initial={{ opacity: 0, x: 50 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true, amount: 0.25 }}
-      transition={{ duration: 0.65 }}
-    >
-      <div className="laptop-glow" />
+    <div className="laptop-scene reveal" role="img" aria-label="Code editor illustration">
+      <div className="laptop-glow" aria-hidden="true" />
 
-      <motion.div
-        className="laptop"
-        whileHover={{ rotateX: 2, rotateY: -4, y: -6 }}
-        transition={{ type: "spring", stiffness: 180, damping: 18 }}
-      >
+      <div className="laptop" data-cursor="hover">
         <div className="laptop-screen">
-          <div className="ide-topbar">
+          <div className="ide-topbar" aria-hidden="true">
             <div className="window-dots"><span /><span /><span /></div>
             <span className="ide-tab">App.jsx</span>
           </div>
@@ -54,18 +43,12 @@ export default function LaptopVisual() {
             </div>
           </div>
         </div>
-        <div className="laptop-base" />
-      </motion.div>
+        <div className="laptop-base" aria-hidden="true" />
+      </div>
 
-      <motion.div className="floating-chip chip-code" animate={{ y: [0, -9, 0] }} transition={{ duration: 4, repeat: Infinity }}>
-        <Code2 size={18} /> Clean Code
-      </motion.div>
-      <motion.div className="floating-chip chip-score" animate={{ y: [0, 8, 0] }} transition={{ duration: 4.6, repeat: Infinity }}>
-        <Gauge size={18} /> <strong>98</strong> Performance
-      </motion.div>
-      <motion.div className="floating-chip chip-ui" animate={{ y: [0, -7, 0] }} transition={{ duration: 5.2, repeat: Infinity }}>
-        <Sparkles size={18} /> Modern UI
-      </motion.div>
-    </motion.div>
+      <div className="floating-chip chip-code float-soft-up"><Code2 size={18} aria-hidden="true" /> Clean Code</div>
+      <div className="floating-chip chip-score float-soft-down"><Gauge size={18} aria-hidden="true" /> <strong>98</strong> Performance</div>
+      <div className="floating-chip chip-ui float-soft-slow"><Sparkles size={18} aria-hidden="true" /> Modern UI</div>
+    </div>
   );
 }

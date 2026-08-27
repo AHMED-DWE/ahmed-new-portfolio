@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ahmed-new-portfolio.netlify.app/sitemap.xml

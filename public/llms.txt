@@ -1,0 +1,17 @@
+# Ahmed Kashif Portfolio
+
+Ahmed Kashif is a Frontend Developer focused on fast, responsive and accessible web interfaces built with React.js, JavaScript, HTML, CSS and Tailwind CSS.
+
+## Main pages
+
+- [Ahmed Kashif Portfolio](https://ahmed-new-portfolio.netlify.app/): Main portfolio with About, Skills, Services, Projects, Process and Contact sections.
+- [NovaShop E-Commerce Demo](https://ahmed-new-portfolio.netlify.app/ecommerce): Responsive React shopping interface demo.
+
+## Profiles
+
+- [GitHub](https://github.com/ahmed-dew123)
+- [LinkedIn](https://www.linkedin.com/in/ahmed-kashif-6665992b2)
+
+## Contact
+
+- [Email Ahmed Kashif](mailto:mrahmedkashif78@gmail.com)

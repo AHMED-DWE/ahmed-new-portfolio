@@ -10,42 +10,70 @@ export default function Navbar({ darkMode, setDarkMode }) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 20);
+    let ticking = false;
 
-      // Keep the active underline matched with the section on screen.
-      let current = "home";
-      for (const id of links) {
-        const section = document.getElementById(id);
-        if (section && section.getBoundingClientRect().top <= 150) current = id;
-      }
-      setActive(current);
+    const updateScrolled = () => {
+      setScrolled(window.scrollY > 20);
+      ticking = false;
     };
 
-    onScroll();
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(updateScrolled);
+    };
+
+    updateScrolled();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+
+    const sections = links.map((id) => document.getElementById(id)).filter(Boolean);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+        if (visible[0]?.target?.id) setActive(visible[0].target.id);
+      },
+      { rootMargin: "-20% 0px -60% 0px", threshold: [0.01, 0.2, 0.5] }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      observer.disconnect();
+    };
   }, []);
+
+  useEffect(() => {
+    if (!menuOpen) return undefined;
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [menuOpen]);
 
   const goTo = (id) => {
     setMenuOpen(false);
-    const target = document.getElementById(id);
-    if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   return (
     <header className={`topbar ${scrolled ? "topbar-scrolled" : ""}`}>
-      <nav className="nav-wrap">
-        <button className="logo-button" onClick={() => goTo("home")} aria-label="Go to home">
+      <nav className="nav-wrap" aria-label="Primary navigation">
+        <button type="button" className="logo-button" onClick={() => goTo("home")} aria-label="Go to home">
           <Logo />
         </button>
 
         <div className="desktop-nav">
           {links.map((item) => (
             <button
+              type="button"
               key={item}
               className={`nav-link ${active === item ? "active" : ""}`}
               onClick={() => goTo(item)}
+              aria-current={active === item ? "page" : undefined}
             >
               {item}
             </button>
@@ -54,27 +82,31 @@ export default function Navbar({ darkMode, setDarkMode }) {
 
         <div className="nav-actions">
           <button
+            type="button"
             className="icon-button"
             onClick={() => setDarkMode((value) => !value)}
-            aria-label="Toggle theme"
+            aria-label={darkMode ? "Switch to light theme" : "Switch to dark theme"}
           >
-            {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+            {darkMode ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
           </button>
 
           <button
+            type="button"
             className="mobile-menu-button"
             onClick={() => setMenuOpen((value) => !value)}
-            aria-label="Toggle menu"
+            aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-navigation"
           >
-            {menuOpen ? <X size={22} /> : <Menu size={22} />}
+            {menuOpen ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
           </button>
         </div>
       </nav>
 
       {menuOpen && (
-        <div className="mobile-nav glass-card">
+        <div id="mobile-navigation" className="mobile-nav glass-card" role="navigation" aria-label="Mobile navigation">
           {links.map((item) => (
-            <button key={item} onClick={() => goTo(item)} className={active === item ? "active" : ""}>
+            <button type="button" key={item} onClick={() => goTo(item)} className={active === item ? "active" : ""}>
               {item}
             </button>
           ))}

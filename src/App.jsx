@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { lazy, Suspense, useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -8,9 +7,10 @@ import Skills from "./pages/Skills";
 import Services from "./pages/Services";
 import Projects from "./pages/Projects";
 import Experience from "./pages/Experience";
-import Ecommerce from "./pages/Ecommerce";
 import CustomCursor from "./components/CustomCursor";
 import ScrollProgress from "./components/ScrollProgress";
+
+const Ecommerce = lazy(() => import("./pages/Ecommerce"));
 
 function Portfolio({ darkMode, setDarkMode }) {
   return (
@@ -18,48 +18,68 @@ function Portfolio({ darkMode, setDarkMode }) {
       <CustomCursor />
       <ScrollProgress />
       <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
-      <main>
-        <Home darkMode={darkMode} />
-        <About darkMode={darkMode} />
-        <Skills darkMode={darkMode} />
-        <Services darkMode={darkMode} />
-        <Projects darkMode={darkMode} />
-        <Experience darkMode={darkMode} />
+      <main id="main-content">
+        <Home />
+        <About />
+        <Skills />
+        <Services />
+        <Projects />
+        <Experience />
       </main>
-      <Footer darkMode={darkMode} />
+      <Footer />
     </div>
   );
 }
 
 export default function App() {
-  const location = useLocation();
-
-  // Theme is saved so the site keeps the same look after refresh.
   const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem("theme") !== "light";
+    try {
+      return localStorage.getItem("theme") !== "light";
+    } catch {
+      return true;
+    }
   });
+
+  useEffect(() => {
+    const items = Array.from(document.querySelectorAll(".reveal"));
+    if (!items.length || !window.IntersectionObserver) return undefined;
+
+    items.forEach((item) => item.classList.add("reveal-ready"));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        });
+      },
+      { rootMargin: "0px 0px -8%", threshold: 0.08 }
+    );
+
+    items.forEach((item) => observer.observe(item));
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     document.body.classList.toggle("dark", darkMode);
     document.body.classList.toggle("light", !darkMode);
-    localStorage.setItem("theme", darkMode ? "dark" : "light");
+    document.documentElement.style.colorScheme = darkMode ? "dark" : "light";
+    try {
+      localStorage.setItem("theme", darkMode ? "dark" : "light");
+    } catch {
+      // The page still works when storage is blocked.
+    }
   }, [darkMode]);
 
-  // Every route starts from the top. It also fixes odd positions after opening a project page.
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-  }, [location.pathname]);
+  const path = window.location.pathname.replace(/\/+$/, "") || "/";
 
-  return (
-    <Routes>
-      <Route
-        path="/"
-        element={<Portfolio darkMode={darkMode} setDarkMode={setDarkMode} />}
-      />
-      <Route
-        path="/ecommerce"
-        element={<Ecommerce darkMode={darkMode} setDarkMode={setDarkMode} />}
-      />
-    </Routes>
-  );
+  if (path === "/ecommerce") {
+    return (
+      <Suspense fallback={<div className="route-loader" aria-live="polite">Loading project…</div>}>
+        <Ecommerce />
+      </Suspense>
+    );
+  }
+
+  return <Portfolio darkMode={darkMode} setDarkMode={setDarkMode} />;
 }
