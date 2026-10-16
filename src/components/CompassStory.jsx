@@ -34,11 +34,11 @@ const stack = ["JavaScript", "Chrome Extension", "Supabase", "React + Vite", "Gi
 
 export default function CompassStory({ image, settingsImage }) {
   return (
-    <div id="keywords-compass" className="compass-story section-anchor">
+    <div className="compass-story">
       <div className="compass-hero glass-card reveal">
         <div className="compass-copy">
           <p className="eyebrow">CASE STUDY</p>
-          <h3>Keywords Compass</h3>
+          <h3>From hundreds of rows to a clear list</h3>
           <p className="compass-by">Chrome extension, product by Ahmed Kashif</p>
           <p>
             When you research Amazon keywords in Helium 10 Cerebro, you scroll through hundreds of rows and decide on each one. It is slow, and two people never decide the same way.

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Download, Menu, Moon, Sun, X } from "lucide-react";
 import Logo from "./Logo";
 
@@ -8,13 +8,29 @@ export default function Navbar({ darkMode, setDarkMode }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState("home");
   const [scrolled, setScrolled] = useState(false);
+  const [indicator, setIndicator] = useState({ left: 0, width: 0, show: false });
+  const navRef = useRef(null);
 
   useEffect(() => {
     let ticking = false;
 
+    /* The active link is the last section whose top has passed 40% of the screen.
+       At the very bottom of the page it is always Contact, because that section is too short to reach the 40% line. */
     const update = () => {
-      setScrolled(window.scrollY > 20);
       ticking = false;
+      setScrolled(window.scrollY > 20);
+
+      const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+      let current = "home";
+      if (atBottom) {
+        current = "contact";
+      } else {
+        links.forEach((id) => {
+          const el = document.getElementById(id);
+          if (el && el.getBoundingClientRect().top <= window.innerHeight * 0.4) current = id;
+        });
+      }
+      setActive(current);
     };
 
     const onScroll = () => {
@@ -25,24 +41,28 @@ export default function Navbar({ darkMode, setDarkMode }) {
 
     update();
     window.addEventListener("scroll", onScroll, { passive: true });
-
-    const sections = links.map((id) => document.getElementById(id)).filter(Boolean);
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (visible[0]?.target?.id) setActive(visible[0].target.id);
-      },
-      { rootMargin: "-20% 0px -60% 0px", threshold: [0.01, 0.2, 0.5] }
-    );
-    sections.forEach((section) => observer.observe(section));
-
+    window.addEventListener("resize", onScroll);
     return () => {
       window.removeEventListener("scroll", onScroll);
-      observer.disconnect();
+      window.removeEventListener("resize", onScroll);
     };
   }, []);
+
+  /* One sliding underline that moves to the active link. */
+  useLayoutEffect(() => {
+    const measure = () => {
+      const el = navRef.current?.querySelector(".nav-link.active");
+      if (!el) {
+        setIndicator((prev) => (prev.show ? { ...prev, show: false } : prev));
+        return;
+      }
+      setIndicator({ left: el.offsetLeft, width: el.offsetWidth, show: true });
+    };
+
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [active]);
 
   useEffect(() => {
     if (!menuOpen) return undefined;
@@ -68,7 +88,7 @@ export default function Navbar({ darkMode, setDarkMode }) {
           <Logo />
         </button>
 
-        <div className="desktop-nav">
+        <div className="desktop-nav" ref={navRef}>
           {links.map((item) => (
             <button
               type="button"
@@ -80,6 +100,11 @@ export default function Navbar({ darkMode, setDarkMode }) {
               {item}
             </button>
           ))}
+          <span
+            className="nav-indicator"
+            aria-hidden="true"
+            style={{ transform: `translateX(${indicator.left}px)`, width: indicator.width, opacity: indicator.show ? 1 : 0 }}
+          />
         </div>
 
         <div className="nav-actions">

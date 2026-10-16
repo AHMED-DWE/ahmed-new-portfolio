@@ -17,10 +17,10 @@ export default function Footer() {
           </div>
 
           <div className="contact-actions">
-            <a className="btn btn-primary" href="mailto:mrahmedkashif78@gmail.com">Send Email <Send size={17} aria-hidden="true" /></a>
+            <a className="btn btn-primary" data-magnet href="mailto:mrahmedkashif78@gmail.com">Send Email <Send size={17} aria-hidden="true" /></a>
             <div className="social-row">
-              <a href="https://github.com/ahmed-dew123" target="_blank" rel="noopener noreferrer" aria-label="Ahmed Kashif on GitHub"><Github aria-hidden="true" /></a>
-              <a href="https://www.linkedin.com/in/ahmed-kashif-6665992b2" target="_blank" rel="noopener noreferrer" aria-label="Ahmed Kashif on LinkedIn"><Linkedin aria-hidden="true" /></a>
+              <a data-magnet href="https://github.com/ahmed-dew123" target="_blank" rel="noopener noreferrer" aria-label="Ahmed Kashif on GitHub"><Github aria-hidden="true" /></a>
+              <a data-magnet href="https://www.linkedin.com/in/ahmed-kashif-6665992b2" target="_blank" rel="noopener noreferrer" aria-label="Ahmed Kashif on LinkedIn"><Linkedin aria-hidden="true" /></a>
             </div>
           </div>
         </div>

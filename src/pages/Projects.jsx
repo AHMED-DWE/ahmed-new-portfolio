@@ -1,11 +1,9 @@
 import SectionTitle from "../components/SectionTitle";
 import ProjectCard from "../components/ProjectCard";
 import CompassVisual from "../components/CompassVisual";
-import CompassStory from "../components/CompassStory";
 import { ResponsiveVisual, StoreVisual } from "../components/ProjectVisual";
 
 const COMPASS_PREVIEW = "/keywords-compass.webp";
-const COMPASS_SETTINGS = "/keywords-compass-settings.webp";
 
 export default function Projects() {
   return (
@@ -34,8 +32,9 @@ export default function Projects() {
             text="Color-codes Helium 10 Cerebro keywords as relevant, partial or duplicate, so a long keyword list is sorted at a glance."
             tags={["Chrome Extension", "JavaScript", "Supabase"]}
             visual={<CompassVisual image={COMPASS_PREVIEW} alt="Keywords Compass Chrome extension design preview" />}
-            to="#keywords-compass"
+            to="/keywords-compass"
             linkText="Read the full story"
+            featured
           />
           <ProjectCard
             index={2}
@@ -46,8 +45,6 @@ export default function Projects() {
             visual={<ResponsiveVisual />}
           />
         </div>
-
-        <CompassStory image={COMPASS_PREVIEW} settingsImage={COMPASS_SETTINGS} />
       </div>
     </section>
   );

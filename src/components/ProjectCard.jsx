@@ -1,8 +1,9 @@
 import { ArrowUpRight } from "lucide-react";
 
-export default function ProjectCard({ label, title, text, tags, visual, to, linkText = "View project", index = 0 }) {
+export default function ProjectCard({ label, title, text, tags, visual, to, linkText = "View project", index = 0, featured = false }) {
   return (
-    <article className="project-card glass-card spot reveal" style={{ "--i": index }}>
+    <article className={`project-card glass-card spot reveal ${featured ? "featured" : ""}`} style={{ "--i": index }}>
+      {featured && <span className="featured-badge">Featured</span>}
       <div className="project-visual-wrap">{visual}</div>
       <div className="project-card-body">
         <p className="project-label">{label}</p>
