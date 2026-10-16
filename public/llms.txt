@@ -7,6 +7,8 @@ Ahmed Kashif is a Frontend Developer focused on fast, responsive and accessible 
 - [Ahmed Kashif Portfolio](https://ahmed-new-portfolio.netlify.app/): Main portfolio with About, Skills, Services, Projects, Process and Contact sections.
 - [NovaShop E-Commerce Demo](https://ahmed-new-portfolio.netlify.app/ecommerce): Responsive React shopping interface demo.
 
+- [Keywords Compass](https://ahmed-new-portfolio.netlify.app/#keywords-compass): Chrome extension that color-codes Helium 10 Cerebro keywords for Amazon keyword research.
+
 ## Profiles
 
 - [GitHub](https://github.com/ahmed-dew123)

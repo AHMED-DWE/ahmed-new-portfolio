@@ -14,11 +14,11 @@ export default function Services() {
   return (
     <section id="services" className="section-anchor section-pad compact-top">
       <div className="page-container">
-        <SectionTitle eyebrow="WHAT I DO" title="Services focused on the frontend" text="Simple services that match the work I actually do and keep the portfolio believable." />
+        <SectionTitle eyebrow="WHAT I DO" title="Services focused on the frontend" text="Focused services that match the work I do every day." />
 
         <div className="services-grid">
-          {services.map(([Icon, title, text]) => (
-            <article className="service-card glass-card reveal" key={title}>
+          {services.map(([Icon, title, text], i) => (
+            <article className="service-card glass-card spot reveal" style={{ "--i": i }} key={title}>
               <div className="service-icon"><Icon aria-hidden="true" /></div>
               <h3>{title}</h3>
               <p>{text}</p>

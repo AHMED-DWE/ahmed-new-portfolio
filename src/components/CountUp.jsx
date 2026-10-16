@@ -1,33 +1,41 @@
 import { useEffect, useRef, useState } from "react";
-import { useInView } from "framer-motion";
 
-export default function CountUp({ value, suffix = "" }) {
+/* Counts from 0 to `value` once the number scrolls into view. */
+export default function CountUp({ value, suffix = "", duration = 1300 }) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, amount: 0.7 });
-  const [count, setCount] = useState(0);
+  const [shown, setShown] = useState(0);
 
   useEffect(() => {
-    if (!inView) return;
+    const el = ref.current;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    let frame;
-    const duration = 1100;
-    const start = performance.now();
+    if (!el || reduced || !("IntersectionObserver" in window)) {
+      setShown(value);
+      return undefined;
+    }
 
-    const tick = (now) => {
-      const progress = Math.min((now - start) / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.round(value * eased));
-      if (progress < 1) frame = requestAnimationFrame(tick);
+    let frame = 0;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        observer.disconnect();
+        const start = performance.now();
+        const tick = (now) => {
+          const t = Math.min(1, (now - start) / duration);
+          setShown(Math.round(value * (1 - Math.pow(1 - t, 3))));
+          if (t < 1) frame = requestAnimationFrame(tick);
+        };
+        frame = requestAnimationFrame(tick);
+      },
+      { threshold: 0.6 }
+    );
+
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+      if (frame) cancelAnimationFrame(frame);
     };
+  }, [value, duration]);
 
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [inView, value]);
-
-  return (
-    <span ref={ref}>
-      {count}
-      {suffix}
-    </span>
-  );
+  return <span ref={ref}>{shown}{suffix}</span>;
 }

@@ -1,30 +1,11 @@
-# Ahmed Kashif Portfolio — Animated Redesign
+# Ahmed Kashif Portfolio
 
-## Run locally
-```bash
+React + Vite + Tailwind portfolio.
+
+```
 npm install
-npm run dev
+npm run dev     # local
+npm run build   # production build in dist/
 ```
 
-## Production build
-```bash
-npm run build
-```
-
-The deployable Vite output is created in `dist/`.
-
-## Main animation features
-- Intro loader transition
-- Scroll progress bar
-- Auto-hiding animated navbar + full-screen mobile menu
-- Custom cursor on desktop
-- Magnetic CTA buttons
-- Mouse-parallax hero portrait and floating tech badges
-- Animated hero headline/rotating word
-- Animated counters
-- 3D hover/tilt service cards with cursor spotlight
-- Orbiting skill visualization + animated progress bars
-- Infinite technology marquee
-- Scroll-reveal project panels
-- Animated contact CTA
-- Reduced-motion accessibility fallback
+Keywords Compass images: `public/keywords-compass.webp` and `public/keywords-compass-settings.webp`. Replace these files to update the previews.

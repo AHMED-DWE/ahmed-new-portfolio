@@ -1,6 +1,11 @@
 import SectionTitle from "../components/SectionTitle";
 import ProjectCard from "../components/ProjectCard";
-import { DashboardVisual, ResponsiveVisual, StoreVisual } from "../components/ProjectVisual";
+import CompassVisual from "../components/CompassVisual";
+import CompassStory from "../components/CompassStory";
+import { ResponsiveVisual, StoreVisual } from "../components/ProjectVisual";
+
+const COMPASS_PREVIEW = "/keywords-compass.webp";
+const COMPASS_SETTINGS = "/keywords-compass-settings.webp";
 
 export default function Projects() {
   return (
@@ -8,13 +13,13 @@ export default function Projects() {
       <div className="page-container">
         <SectionTitle
           eyebrow="FEATURED PROJECTS"
-          title="Projects with visuals that match their purpose"
-          text="Instead of a generic code card, every project preview now shows what the project is actually about."
+          title="Things I have built"
+          text="A shopping interface, a Chrome extension for Amazon keyword research, and a responsive landing page."
         />
 
         <div className="projects-grid">
           <ProjectCard
-            number="01"
+            index={0}
             label="REACT PROJECT"
             title="NovaShop E-Commerce"
             text="A modern shopping interface with product cards, search, filters and a responsive cart experience."
@@ -23,15 +28,17 @@ export default function Projects() {
             to="/ecommerce"
           />
           <ProjectCard
-            number="02"
-            label="DASHBOARD UI"
-            title="DevFlow Dashboard"
-            text="A dark admin dashboard concept with analytics cards, charts and responsive content panels."
-            tags={["React", "Charts UI", "Dashboard"]}
-            visual={<DashboardVisual />}
+            index={1}
+            label="CHROME EXTENSION"
+            title="Keywords Compass"
+            text="Color-codes Helium 10 Cerebro keywords as relevant, partial or duplicate, so a long keyword list is sorted at a glance."
+            tags={["Chrome Extension", "JavaScript", "Supabase"]}
+            visual={<CompassVisual image={COMPASS_PREVIEW} alt="Keywords Compass Chrome extension design preview" />}
+            to="#keywords-compass"
+            linkText="Read the full story"
           />
           <ProjectCard
-            number="03"
+            index={2}
             label="RESPONSIVE WEBSITE"
             title="Multi Device Landing Page"
             text="A landing page concept focused on proper desktop, tablet and mobile layouts."
@@ -39,6 +46,8 @@ export default function Projects() {
             visual={<ResponsiveVisual />}
           />
         </div>
+
+        <CompassStory image={COMPASS_PREVIEW} settingsImage={COMPASS_SETTINGS} />
       </div>
     </section>
   );

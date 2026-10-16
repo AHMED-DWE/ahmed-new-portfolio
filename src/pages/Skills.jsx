@@ -10,6 +10,8 @@ const skills = [
   { name: "Git / GitHub", value: 80, Icon: SiGit },
 ];
 
+const marquee = ["HTML", "CSS", "JAVASCRIPT", "REACT", "TAILWIND", "GIT", "RESPONSIVE UI", "ANIMATION"];
+
 export default function Skills() {
   return (
     <section id="skills" className="section-anchor section-pad compact-top">
@@ -23,8 +25,8 @@ export default function Skills() {
             <div className="orbit-center"><SiGithub focusable="false" /><small>Frontend</small></div>
           </div>
 
-          <div className="skill-bars glass-card reveal">
-            {skills.map(({ name, value, Icon }) => (
+          <div className="skill-bars glass-card spot reveal">
+            {skills.map(({ name, value, Icon }, i) => (
               <div className="skill-row" key={name}>
                 <div className="skill-label">
                   <span><Icon aria-hidden="true" focusable="false" /></span>
@@ -32,7 +34,7 @@ export default function Skills() {
                   <strong>{value}%</strong>
                 </div>
                 <div className="skill-track" role="progressbar" aria-label={`${name} skill level`} aria-valuenow={value} aria-valuemin="0" aria-valuemax="100">
-                  <i style={{ width: `${value}%` }} />
+                  <i style={{ width: `${value}%`, "--i": i }} />
                 </div>
               </div>
             ))}
@@ -41,7 +43,7 @@ export default function Skills() {
 
         <div className="marquee" aria-hidden="true">
           <div className="marquee-track">
-            {["HTML", "CSS", "JAVASCRIPT", "REACT", "TAILWIND", "GIT", "RESPONSIVE UI", "ANIMATION", "HTML", "CSS", "JAVASCRIPT", "REACT"].map((item, index) => <span key={`${item}-${index}`}>{item} ✦</span>)}
+            {[...marquee, ...marquee].map((item, index) => <span key={`${item}-${index}`}>{item} ✦</span>)}
           </div>
         </div>
       </div>

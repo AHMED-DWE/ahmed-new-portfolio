@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Menu, Moon, Sun, X } from "lucide-react";
+import { Download, Menu, Moon, Sun, X } from "lucide-react";
 import Logo from "./Logo";
 
 const links = ["home", "about", "skills", "services", "projects", "experience", "contact"];
@@ -12,7 +12,7 @@ export default function Navbar({ darkMode, setDarkMode }) {
   useEffect(() => {
     let ticking = false;
 
-    const updateScrolled = () => {
+    const update = () => {
       setScrolled(window.scrollY > 20);
       ticking = false;
     };
@@ -20,10 +20,10 @@ export default function Navbar({ darkMode, setDarkMode }) {
     const onScroll = () => {
       if (ticking) return;
       ticking = true;
-      requestAnimationFrame(updateScrolled);
+      requestAnimationFrame(update);
     };
 
-    updateScrolled();
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
 
     const sections = links.map((id) => document.getElementById(id)).filter(Boolean);
@@ -36,7 +36,6 @@ export default function Navbar({ darkMode, setDarkMode }) {
       },
       { rootMargin: "-20% 0px -60% 0px", threshold: [0.01, 0.2, 0.5] }
     );
-
     sections.forEach((section) => observer.observe(section));
 
     return () => {
@@ -47,11 +46,14 @@ export default function Navbar({ darkMode, setDarkMode }) {
 
   useEffect(() => {
     if (!menuOpen) return undefined;
-    const closeOnEscape = (event) => {
-      if (event.key === "Escape") setMenuOpen(false);
+    const onKey = (event) => event.key === "Escape" && setMenuOpen(false);
+    const onResize = () => window.innerWidth > 820 && setMenuOpen(false);
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("resize", onResize);
     };
-    window.addEventListener("keydown", closeOnEscape);
-    return () => window.removeEventListener("keydown", closeOnEscape);
   }, [menuOpen]);
 
   const goTo = (id) => {
@@ -60,7 +62,7 @@ export default function Navbar({ darkMode, setDarkMode }) {
   };
 
   return (
-    <header className={`topbar ${scrolled ? "topbar-scrolled" : ""}`}>
+    <header className={`topbar ${scrolled ? "topbar-scrolled" : ""} ${menuOpen ? "menu-open" : ""}`}>
       <nav className="nav-wrap" aria-label="Primary navigation">
         <button type="button" className="logo-button" onClick={() => goTo("home")} aria-label="Go to home">
           <Logo />
@@ -83,35 +85,46 @@ export default function Navbar({ darkMode, setDarkMode }) {
         <div className="nav-actions">
           <button
             type="button"
-            className="icon-button"
+            className="icon-button swap"
             onClick={() => setDarkMode((value) => !value)}
             aria-label={darkMode ? "Switch to light theme" : "Switch to dark theme"}
           >
-            {darkMode ? <Sun size={18} aria-hidden="true" /> : <Moon size={18} aria-hidden="true" />}
+            <Sun size={18} aria-hidden="true" className={darkMode ? "swap-on" : "swap-off"} />
+            <Moon size={18} aria-hidden="true" className={darkMode ? "swap-off" : "swap-on"} />
           </button>
 
           <button
             type="button"
-            className="mobile-menu-button"
+            className="icon-button mobile-menu-button swap"
             onClick={() => setMenuOpen((value) => !value)}
             aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
           >
-            {menuOpen ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
+            <Menu size={21} aria-hidden="true" className={menuOpen ? "swap-off" : "swap-on"} />
+            <X size={21} aria-hidden="true" className={menuOpen ? "swap-on" : "swap-off"} />
           </button>
         </div>
       </nav>
 
-      {menuOpen && (
-        <div id="mobile-navigation" className="mobile-nav glass-card" role="navigation" aria-label="Mobile navigation">
-          {links.map((item) => (
-            <button type="button" key={item} onClick={() => goTo(item)} className={active === item ? "active" : ""}>
-              {item}
-            </button>
-          ))}
-        </div>
-      )}
+      <div className="menu-backdrop" onClick={() => setMenuOpen(false)} aria-hidden="true" />
+
+      <nav id="mobile-navigation" className="mobile-nav" aria-label="Mobile navigation" inert={!menuOpen}>
+        {links.map((item, index) => (
+          <button
+            type="button"
+            key={item}
+            style={{ "--i": index }}
+            onClick={() => goTo(item)}
+            className={active === item ? "active" : ""}
+          >
+            {item}
+          </button>
+        ))}
+        <a className="btn btn-primary" style={{ "--i": links.length }} href="/AHMED.pdf" download>
+          Download CV <Download size={17} aria-hidden="true" />
+        </a>
+      </nav>
     </header>
   );
 }

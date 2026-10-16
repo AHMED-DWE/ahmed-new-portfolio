@@ -16,8 +16,8 @@ export default function Experience() {
         <SectionTitle eyebrow="MY PROCESS" title="From idea to a working page" text="A simple process that keeps my code easy to follow and the final UI consistent." align="center" />
 
         <div className="process-line">
-          {steps.map(([Icon, number, title, text]) => (
-            <div className="process-step reveal" key={title}>
+          {steps.map(([Icon, number, title, text], i) => (
+            <div className="process-step reveal" style={{ "--i": i }} key={title}>
               <div className="process-icon"><Icon aria-hidden="true" /></div>
               <span>{number}</span>
               <h3>{title}</h3>
@@ -26,7 +26,7 @@ export default function Experience() {
           ))}
         </div>
 
-        <div className="learning-card glass-card reveal">
+        <div className="learning-card glass-card spot reveal">
           <div>
             <p className="eyebrow">ALWAYS LEARNING</p>
             <h3>Improving one project at a time.</h3>

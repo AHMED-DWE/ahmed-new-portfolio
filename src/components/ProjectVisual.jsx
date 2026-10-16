@@ -15,23 +15,6 @@ export function StoreVisual() {
   );
 }
 
-export function DashboardVisual() {
-  return (
-    <div className="project-art dashboard-art" aria-hidden="true">
-      <div className="dashboard-panel">
-        <div className="dash-side">AK<br /><span>●</span><span>●</span><span>●</span></div>
-        <div className="dash-main">
-          <div className="dash-head"><b>Analytics</b><i /></div>
-          <div className="dash-cards"><span /><span /><span /></div>
-          <div className="dash-chart">
-            {[36, 62, 48, 80, 68, 92, 72].map((h, i) => <i key={i} style={{ height: `${h}%` }} />)}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export function ResponsiveVisual() {
   return (
     <div className="project-art responsive-art" aria-hidden="true">
